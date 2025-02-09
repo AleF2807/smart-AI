@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Promemoria</title>
+    <!-- Inserisci il CSS direttamente qui -->
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .container {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            width: 90%;
+            max-width: 600px;
+            text-align: center;
+        }
+
+        h1 {
+            color: #5e3f72;
+        }
+
+        label {
+            font-size: 18px;
+            margin: 10px 0;
+            display: block;
+            color: #333;
+        }
+
+        input[type="text"], input[type="datetime-local"] {
+            padding: 10px;
+            width: 80%;
+            border: 2px solid #ddd;
+            border-radius: 4px;
+            margin: 10px 0;
+            font-size: 16px;
+        }
+
+        button {
+            padding: 10px 20px;
+            background-color: #5e3f72;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-top: 10px;
+        }
+
+        button:hover {
+            background-color: #4b2b56;
+        }
+
+        ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        li {
+            background-color: #f9f9f9;
+            margin: 10px 0;
+            padding: 15px;
+            border-radius: 6px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+            font-size: 16px;
+            text-align: left;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>Ciao! Benvenuto nell'AI dei promemoria!</h1>
+
+        <div>
+            <label for="event">Cosa devi fare oggi?</label>
+            <input type="text" id="event" placeholder="Es: Compra il regalo per Luca">
+            <button onclick="addEvent()">Aggiungi evento</button>
+        </div>
+
+        <div>
+            <label for="deadline">Quando è la scadenza?</label>
+            <input type="datetime-local" id="deadline">
+            <button onclick="setReminder()">Imposta promemoria</button>
+        </div>
+
+        <ul id="eventList"></ul>
+    </div>
+
+    <script>
+        let events = [];
+
+        function addEvent() {
+            const event = document.getElementById('event').value;
+            if (event) {
+                events.push({ event: event, date: new Date() });
+                updateEventList();
+            }
+        }
+
+        function updateEventList() {
+            const list = document.getElementById('eventList');
+            list.innerHTML = '';
+            events.forEach((e, index) => {
+                let li = document.createElement('li');
+                li.textContent = `${e.event} - ${e.date.toLocaleString()}`;
+                list.appendChild(li);
+            });
+        }
+
+        function setReminder() {
+            const deadline = document.getElementById('deadline').value;
+            if (deadline) {
+                const reminderTime = new Date(deadline) - new Date();
+                if (reminderTime > 0) {
+                    setTimeout(() => {
+                        alert("⚠️ Promemoria: " + "Non dimenticare di " + events[0].event);
+                    }, reminderTime);
+                }
+            }
+        }
+    </script>
+
+</body>
+</html>

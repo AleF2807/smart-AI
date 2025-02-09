@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pianificazione del Tempo</title>
+    <link rel="stylesheet" href="static/style_pianificazione.css">
+</head>
+<body>
+    <!-- Intestazione con il menu -->
+    <header>
+        <div class="menu-toggle" onclick="toggleMenu()">
+            <span class="line"></span>
+            <span class="line"></span>
+            <span class="line"></span>
+        </div>
+        <h1>SmartLife - Pianificazione</h1>
+    </header>
+
+    <!-- Menu laterale -->
+    <div id="side-menu" class="side-menu">
+        <ul>
+            <li><a href="home.html">🏠 Home</a></li>
+            <li><a href="salute.html">💪 Salute</a></li>
+            <li><a href="memoria.html">🧠 Memoria AI</a></li>
+            <li><a href="pianificazione.html">📅 Pianificazione</a></li>
+        </ul>
+    </div>
+
+    <!-- Contenuto principale -->
+    <main>
+        <h2>Pianifica la tua giornata</h2>
+        <p>Ottimizza il tuo tempo con suggerimenti personalizzati in base ai tuoi impegni e al tuo stato d'animo.</p>
+        
+        <!-- Sezione Attività Programmate -->
+        <section class="scheduled-section">
+            <h3>Attività Programmate</h3>
+            <div class="activity">
+                <p><strong>15:00</strong> - Lavoro sulla presentazione</p>
+            </div>
+            <div class="activity">
+                <p><strong>16:30</strong> - Chiamata con il cliente</p>
+            </div>
+        </section>
+
+        <!-- Sezione Tempo Libero -->
+        <section class="free-time-section">
+            <h3>Tempo Libero</h3>
+            <p>Hai 1 ora libera tra le 17:30 e le 18:30. Suggerimenti:</p>
+            <ul>
+                <li>Fai una passeggiata per rilassarti.</li>
+                <li>Leggi un libro o ascolta un podcast interessante.</li>
+            </ul>
+        </section>
+
+        <!-- Sezione Suggerimenti -->
+        <section class="tips-section">
+            <h3>Suggerimenti del giorno</h3>
+            <div class="tip">
+                <p>🧘‍♂️ Hai bisogno di rilassarti? Prova una sessione di meditazione di 10 minuti.</p>
+            </div>
+            <div class="tip">
+                <p>🏃‍♀️ Oggi hai fatto pochi passi. Aggiungi una camminata di 20 minuti.</p>
+            </div>
+        </section>
+    </main>
+
+    <!-- Script per il toggle del menu -->
+    <script>
+        function toggleMenu() {
+            var menu = document.getElementById('side-menu');
+            if (menu.style.right === '0px') {
+                menu.style.right = '-250px'; // Chiudi menu
+            } else {
+                menu.style.right = '0px'; // Apri menu
+            }
+        }
+
+        // Imposta il menu nascosto all'inizio
+        document.getElementById('side-menu').style.right = '-250px';
+    </script>
+</body>
+</html>

@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SmartLife - Home</title>
+    <link rel="stylesheet" href="static/style_home.css">
+    <link rel="manifest" href="./manifest.json">
+</head>
+<body>
+    <!-- Intestazione con il toggle del menu -->
+    <header>
+        <div class="menu-toggle" onclick="toggleMenu()">
+            <span class="line"></span>
+            <span class="line"></span>
+            <span class="line"></span>
+        </div>
+        <h1>SmartLife</h1>
+    </header>
+
+    <!-- Menu laterale che si apre a destra -->
+    <div id="side-menu" class="side-menu">
+        <ul>
+            <li><a href="home.html">🏠 Home</a></li>
+            <li><a href="salute.html">💪 Salute</a></li>
+            <li><a href="Memoria_AI.html">🧠 Memoria AI</a></li>
+            <li><a href="templates/AI.html">🧠 Chat-AI</a></li> <!-- Link corretto -->
+            <li><a href="pianificazione.html">📅 Pianificazione</a></li>
+        </ul>
+    </div>
+
+    <!-- Contenuto principale -->
+    <main>
+        <!-- Sezione Salute Preventiva -->
+        <section id="salute" class="section">
+            <h2>Salute Preventiva</h2>
+            <p>Monitora il tuo sonno, l'alimentazione e l'attività fisica per migliorare la qualità della tua vita.</p>
+            <div class="data-box">
+                <h3>Sonno</h3>
+                <p>Ore dormite: <strong>7h</strong></p>
+            </div>
+            <div class="data-box">
+                <h3>Alimentazione</h3>
+                <p>Consumo zuccheri: <strong>30g</strong></p>
+            </div>
+            <div class="data-box">
+                <h3>Attività Fisica</h3>
+                <p>Passi: <strong>5000</strong></p>
+            </div>
+        </section>
+
+        <!-- Sezione Memoria AI -->
+        <section id="memoria" class="section">
+            <h2>Memoria AI</h2>
+            <p>Organizza i tuoi appuntamenti, compleanni e promemoria in modo intelligente.</p>
+            <div class="data-box">
+                <h3>Prossimo appuntamento</h3>
+                <p><strong>Meeting con il team</strong> - 14:00</p>
+            </div>
+            <div class="data-box">
+                <h3>Compleanni</h3>
+                <p><strong>Compleanno di Luca</strong> - Oggi!</p>
+            </div>
+        </section>
+
+        <!-- Sezione Pianificazione del Tempo -->
+        <section id="pianificazione" class="section">
+            <h2>Pianificazione del Tempo</h2>
+            <p>Organizza la tua giornata in modo efficiente con suggerimenti basati su attività e tempo libero.</p>
+            <div class="data-box">
+                <h3>Attività Programmate</h3>
+                <p>Ore 15:00 - Lavoro sulla presentazione</p>
+            </div>
+            <div class="data-box">
+                <h3>Tempo libero</h3>
+                <p>Ore 17:00 - Passeggiata nel parco</p>
+            </div>
+        </section>
+
+        <!-- Sezione Chat AI -->
+        <section id="chat-ai" class="section">
+            <h2>Chat con AI</h2>
+            <div id="chat-container">
+                <!-- Le risposte della chat si caricheranno qui -->
+            </div>
+            <input type="text" id="chat-input" placeholder="Scrivi qualcosa...">
+            <button id="send-btn" onclick="sendMessage()">Invia</button>
+        </section>
+    </main>
+
+    <!-- Script per il toggle del menu -->
+    <script>
+        
+        if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('./sw.js')
+      .then(() => console.log('Service Worker registrato!'))
+      .catch((error) => console.error('Errore SW:', error));
+  }
+        function toggleMenu() {
+            var menu = document.getElementById('side-menu');
+            if (menu.style.right === '0px') {
+                menu.style.right = '-250px'; // Chiudi menu
+            } else {
+                menu.style.right = '0px'; // Apri menu
+            }
+        }
+
+        // Imposta il menu nascosto all'inizio
+        document.getElementById('side-menu').style.right = '-250px';
+
+        // Gestisce l'invio dei messaggi nella chat
+        function sendMessage() {
+            const userInput = document.getElementById('chat-input').value;
+            if (userInput.trim() === "") return;  // Non inviare se l'input è vuoto
+
+            // Mostra il messaggio dell'utente nella chat
+            const userMessage = document.createElement('div');
+            userMessage.classList.add('message', 'user');
+            userMessage.textContent = userInput;
+            document.getElementById('chat-container').appendChild(userMessage);
+
+            // Pulisci l'input
+            document.getElementById('chat-input').value = '';
+
+            // Scorri verso il basso per vedere l'ultimo messaggio
+            document.getElementById('chat-container').scrollTop = document.getElementById('chat-container').scrollHeight;
+
+            // Invia la richiesta al backend
+            fetch('/get_response', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ user_input: userInput })
+            })
+            .then(response => response.json())
+            .then(data => {
+                // Mostra la risposta dell'AI
+                const aiMessage = document.createElement('div');
+                aiMessage.classList.add('message', 'ai');
+                aiMessage.textContent = data.response;
+                document.getElementById('chat-container').appendChild(aiMessage);
+
+                // Scorri verso il basso per vedere l'ultimo messaggio
+                document.getElementById('chat-container').scrollTop = document.getElementById('chat-container').scrollHeight;
+            })
+            .catch(error => {
+                console.error('Errore:', error);
+            });
+        }
+    </script>
+</body>
+</html>

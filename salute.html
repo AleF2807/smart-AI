@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SmartLife - Salute</title>
+    <link rel="stylesheet" href="/static/style_salute.css">
+</head>
+<body>
+    <!-- Intestazione -->
+    <header>
+        <h1>Salute Preventiva</h1>
+    </header>
+
+    <!-- Contenuto principale -->
+    <main>
+        <!-- Sezione Sonno -->
+        <section class="section">
+            <h2>Sonno</h2>
+            <div class="data-box">
+                <canvas id="sleep-chart"></canvas>
+                <p>Ore dormite: <strong>7h</strong></p>
+                <p>Consiglio: <em>"Cerca di dormire almeno 8 ore per notte."</em></p>
+            </div>
+        </section>
+
+        <!-- Sezione Alimentazione -->
+        <section class="section">
+            <h2>Alimentazione</h2>
+            <div class="data-box">
+                <canvas id="nutrition-chart"></canvas>
+                <p>Zuccheri consumati: <strong>30g</strong></p>
+                <p>Consiglio: <em>"Riduci gli zuccheri a meno di 25g al giorno."</em></p>
+            </div>
+        </section>
+
+        <!-- Sezione Attività Fisica -->
+        <section class="section">
+            <h2>Attività Fisica</h2>
+            <div class="data-box">
+                <canvas id="activity-chart"></canvas>
+                <p>Passi giornalieri: <strong>5000</strong></p>
+                <p>Consiglio: <em>"Punta a raggiungere almeno 10.000 passi al giorno."</em></p>
+            </div>
+        </section>
+    </main>
+
+    <!-- Script per i grafici -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        // Grafico del sonno
+        const sleepCtx = document.getElementById('sleep-chart').getContext('2d');
+        new Chart(sleepCtx, {
+            type: 'doughnut',
+            data: {
+                labels: ['Dormito', 'Da recuperare'],
+                datasets: [{
+                    data: [7, 1], // Ore dormite e mancanti
+                    backgroundColor: ['#4CAF50', '#FF5722'],
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: { position: 'bottom' }
+                }
+            }
+        });
+
+        // Grafico dell'alimentazione
+        const nutritionCtx = document.getElementById('nutrition-chart').getContext('2d');
+        new Chart(nutritionCtx, {
+            type: 'bar',
+            data: {
+                labels: ['Zuccheri', 'Fibre', 'Proteine'],
+                datasets: [{
+                    label: 'Nutrienti (g)',
+                    data: [30, 15, 50], // Quantità nutrizionali
+                    backgroundColor: ['#FF9800', '#8BC34A', '#2196F3']
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: { display: false }
+                }
+            }
+        });
+
+        // Grafico dell'attività fisica
+        const activityCtx = document.getElementById('activity-chart').getContext('2d');
+        new Chart(activityCtx, {
+            type: 'line',
+            data: {
+                labels: ['Lunedì', 'Martedì', 'Mercoledì', 'Giovedì', 'Venerdì', 'Sabato', 'Domenica'],
+                datasets: [{
+                    label: 'Passi giornalieri',
+                    data: [3000, 5000, 4000, 8000, 10000, 7500, 5000], // Dati settimanali
+                    backgroundColor: '#03A9F4',
+                    borderColor: '#03A9F4',
+                    fill: true,
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: { position: 'top' }
+                }
+            }
+        });
+    </script>
+</body>
+</html>

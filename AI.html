@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ChatGPT Interface</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+</head>
+<body class="bg-gray-900 flex items-center justify-center min-h-screen">
+    <div class="bg-gray-800 text-white rounded-lg p-4 space-y-4 w-full max-w-md">
+        <!-- Contenitore per i messaggi -->
+        <div 
+            id="messages" 
+            class="bg-gray-700 p-4 rounded-lg max-h-80 overflow-y-auto"
+        >
+            <!-- I messaggi verranno aggiunti qui -->
+        </div>
+
+        <!-- Campo di input e pulsanti -->
+        <div class="flex items-center space-x-4">
+            <!-- Campo di input -->
+            <input 
+                id="user-input"
+                type="text" 
+                placeholder="Scrivi un messaggio a ChatGPT" 
+                class="bg-transparent flex-grow outline-none text-white placeholder-gray-400"
+            >
+
+            <!-- Pulsante invia -->
+            <button 
+                onclick="sendMessage()" 
+                class="bg-green-500 hover:bg-green-600 text-white w-10 h-10 rounded-full flex items-center justify-center"
+            >
+                <i class="fas fa-paper-plane"></i>
+            </button>
+
+            <!-- Altri pulsanti -->
+            <div class="flex space-x-2">
+                <button class="bg-gray-700 p-2 rounded-full flex items-center justify-center hover:bg-gray-600">
+                    <i class="fas fa-plus text-gray-400"></i>
+                </button>
+                <button class="bg-gray-700 p-2 rounded-full flex items-center justify-center hover:bg-gray-600">
+                    <i class="fas fa-microphone text-gray-400"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        app.use(express.static('templates'));
+
+        async function sendMessage() {
+            const userInput = document.getElementById('user-input').value.trim();
+            
+            // Controllo per evitare invio di messaggi vuoti
+            if (!userInput) {
+                alert("Scrivi un messaggio prima di inviare!");
+                return;
+            }
+
+            try {
+                const response = await fetch('http://localhost:3000/get_response', {
+                    // URL corretto
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ user_input: userInput })
+                });
+
+                if (!response.ok) {
+                    throw new Error('Errore nella rete: ' + response.statusText);
+                }
+
+                const data = await response.json();
+
+                // Aggiunta dei messaggi nella chat
+                const messages = document.getElementById('messages');
+                
+                // Messaggio dell'utente
+                const userMessage = document.createElement('div');
+                userMessage.className = 'text-right text-white mb-2';
+                userMessage.textContent = `Tu: ${userInput}`;
+                messages.appendChild(userMessage);
+
+                // Risposta AI
+                const aiMessage = document.createElement('div');
+                aiMessage.className = 'text-left text-green-400 mb-2';
+                aiMessage.textContent = `AI: ${data.response}`;
+                messages.appendChild(aiMessage);
+
+                // Svuota il campo input e scorri verso il basso
+                document.getElementById('user-input').value = '';
+                messages.scrollTop = messages.scrollHeight;
+
+            } catch (error) {
+                console.error('Errore:', error);
+                alert("Si è verificato un errore durante la comunicazione con il server.");
+            }
+        }
+    </script>
+</body>
+</html>
